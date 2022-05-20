@@ -3,6 +3,10 @@ const app = express();
 
 const db = require("./db");
 const { conn, Bookmark, Category } = db;
+app.use(express.urlencoded({ extended: true }));
+// app.use(require("method-override")("_method"));
+
+//  app.use(express.urlencoded({ extended: false }));
 
 app.get("/", (req, res) => res.redirect("/bookmarks"));
 
@@ -11,6 +15,7 @@ app.get("/bookmarks", async (req, res, next) => {
     const bookmarks = await Bookmark.findAll({
       include: [Category],
     });
+
     const cat = await Category.findAll();
 
     res.send(`
@@ -38,6 +43,7 @@ app.get("/bookmarks", async (req, res, next) => {
             })}
             </select>
             <input name="url" value="amazon.com"></input>
+             <input name="categoryId" value="2"></input>
             <button>SUBMIT</button>
         </form>
 
@@ -85,8 +91,9 @@ app.get("/categories/:id", async (req, res, next) => {
 
 app.post("/bookmarks", async (req, res, next) => {
   try {
-    console.log("HELLOOOOOOOOOO", req);
+    console.log("HELLOOOOOOOOOO", req.body);
     await Bookmark.create(req.body);
+    res.redirect("/bookmarks");
   } catch (error) {
     next(error);
   }
