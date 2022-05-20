@@ -4,9 +4,6 @@ const app = express();
 const db = require("./db");
 const { conn, Bookmark, Category } = db;
 app.use(express.urlencoded({ extended: true }));
-// app.use(require("method-override")("_method"));
-
-//  app.use(express.urlencoded({ extended: false }));
 
 app.get("/", (req, res) => res.redirect("/bookmarks"));
 
